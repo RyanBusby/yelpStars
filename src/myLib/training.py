@@ -30,7 +30,6 @@ def ldaExplode(x):
 
 def getMAT(rdd):
     shape = (m, 1+num_tokens+(2*k))
-    # avoid .collect()
     # https://github.com/tensorflow/examples/blob/master/community/en/docs/deploy/hadoop.md
     row_indices, col_indices, data = zip(*rdd.collect())
     mat = csr_matrix((data, (row_indices,col_indices)), shape=shape)

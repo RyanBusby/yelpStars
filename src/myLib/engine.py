@@ -1,6 +1,3 @@
-import os
-import sys
-os.environ['PYSPARK_PYTHON'] = sys.executable
 
 import pyspark as ps
 from nltk.corpus import stopwords
@@ -81,7 +78,6 @@ class Engine():
 
 	def transformInput(self, r):
 		df = self.process(self.spark.createDataFrame([(0, r)]))
-
 		lda_rdd= self.lda.transform(df).select('id','topicDistribution')\
 		.rdd.flatMap(ldaExplode)
 		pca_rdd = self.pca.transform(df).select('id','pca_features')\
@@ -100,5 +96,5 @@ if __name__ == '__main__':
 	k = 5
 	m = 1000000 # change hard coded funclib accordingly
 	eng = Engine(sc, m, k)
-	r = """I have come here pretty frequently since moving to SF. I will admit my first time in I did freak out over the high prices- but I have to remind myself these store owners are just as subject to high rent as the rest of us. They gotta make a profit too! For a corner market, I'm actually pretty impressed with their selection...down to the gluten free cookies! They really have everything one would need to make a pretty decent home cooked meal- produce, grains, bread, some packaged meat like sausage. Good quality stuff too! Not just ritz crackers, Campbell soup, and dusty condoms like a typical corner market lol. I read a lot of reviews about the bad attitude but I've personally never experienced it. In fact, everyone there has been really nice! Maybe it's the Asian camaraderie we've got going on?? Who knows."""
+	r = """I have come here pretty frequently since moving to SF. I will admit my first time in I did freak out over the high prices- but I have to remind myself these store owners are just as subject to high rent as the rest of us. They gotta make a profit too! For a corner market, I'm actually pretty impressed with their selection...down to the gluten free cookies! They really have everything one would need to make a pretty decent home cooked meal- produce, grains, bread, some packaged meat like sausage. Good quality stuff too! Not just ritz crackers, Campbell soup, and dusty condoms like a typical corner market lol. I read a lot of reviews about the bad attitude but I've personally never experienced it. In fact, everyone there has been really nice!"""
 	print(eng.transformInput(r))
