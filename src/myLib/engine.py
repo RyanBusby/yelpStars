@@ -30,8 +30,6 @@ class Engine():
 		)
 		checkpoint_path = "../../data/models/tensorflow/cp.ckpt"
 		self.n = len(self.lda.stages[0].vocabulary) + (2*self.k)
-		# you have to get this from training data or something
-		# or else init the mlp outside of the init, using the shape of the transformed input
 		self.mlp = tf.keras.models.Sequential(
 			[
 				tf.keras.layers.Dense(
@@ -81,14 +79,8 @@ class Engine():
 
 		return stemdf
 
-		lda_rdd= lda.transform(rDF).select('id','topicDistribution')\
-
 	def transformInput(self, r):
 		df = self.process(self.spark.createDataFrame([(0, r)]))
-		# how can you pass self.n_tokens into *Explode?
-		# including the mapped functions in this class causes a different error SPARK 5063 (?)
-		# try removing the class and just use functions
-		# put all these functions into myLib and use them in my_app
 
 		lda_rdd= self.lda.transform(df).select('id','topicDistribution')\
 		.rdd.flatMap(ldaExplode)
